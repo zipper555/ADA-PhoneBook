@@ -1,6 +1,8 @@
 with Ada.Text_IO;         use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Real_Time; use Ada.Real_Time;
+with time_mgr; use time_mgr;
 
 package body Contact_Mgr is
    
@@ -31,7 +33,6 @@ package body Contact_Mgr is
          V := ContactCount;
       end Get;
    end ContactCountObj;
-   
    
    
    
@@ -89,14 +90,63 @@ package body Contact_Mgr is
          Put_Line(Book1(Index).FirstName(1.. Book1(Index).LenFirstName)
                   & " " & Book1(Index).LastName(1.. Book1(Index).LenLastName)
                   & " | " & Book1(Index).PhoneNo(1.. Book1(Index).LenPhoneNo));
-      
+         
+          --Updating LastModified Statistics
+         Update_Modified_Time.Go;
          --Incrementing Contact Count
          ContactCountObj.Incr;
-      end if;
-      
+      end if;      
     
    end Add_Contact;
-                 
-                      
+             
+   -- Procedure to delete contact
+   procedure Delete_Contact is
+      Entered : Natural;
+      Count : Natural;
+      Index : Natural;
+   begin
+      Put_Line("Displaying the Contact list");
+      
+      -- Fix me: Hook the display function here
+      
+      Put_Line("Enter the Contact no. to delete");
+      Get(Entered);
+      ContactCountObj.Get(Count);
+      if (Entered > Count or Entered = 0) then
+         Put_Line ("Enter a valid no. ");
+      else
+         -- Reset the array so that deleted item is removed
+         Index := Entered;
+         for i in  Entered .. Count - 1 loop    
+            Book1(Index) := Book1(Index + 1);
+            Index := Index + 1;
+         end loop;
+         
+         --Updating LastModified Statistics
+         Update_Modified_Time.Go;
+         -- Decrementing Contact count
+         ContactCountObj.Decr;
+         
+      end if;
+      
+   end Delete_Contact;
+ 
+   
+   -- Procedure to get Time statistics
+   procedure Get_Time_Stats is 
+      Now_Time : Time := Clock;
+      FromModified : Time_Span;
+      FromStart : Time_Span;    
+   begin
+      FromModified := Now_Time - Get_Last_Modified_Time;
+      FromStart := Now_Time - Get_Start_Time;
+      Put_Line("----------------------------------------------------");
+      Put_Line("Time from start: " & Duration'Image(To_Duration(FromStart)) 
+               & " seconds");
+      Put_Line("Time since last modification: " & Duration'Image(To_Duration(FromModified)) 
+               & " seconds");
+      Put_Line("----------------------------------------------------");
+   end Get_Time_Stats;
+   
 
 end Contact_Mgr;
