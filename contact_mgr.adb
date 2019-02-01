@@ -110,6 +110,8 @@ package body Contact_Mgr is
       -- Fix me: Hook the display function here
       
       Put_Line("Enter the Contact no. to delete");
+      -- Contact no. is the index of the contact in the array of contacts
+      
       Get(Entered);
       ContactCountObj.Get(Count);
       if (Entered > Count or Entered = 0) then
