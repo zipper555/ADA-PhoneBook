@@ -12,7 +12,15 @@ package Contact_Mgr is
    type PhoneBook is array (1..10) of Contact;
    -- Have declared it here so that it is visible from outside
    
-   ContactCount : Natural;
+   -- Protected Object for contact count
+   protected ContactCountObj is
+      procedure Incr;
+      procedure Decr;
+      entry Get (V : out Natural);
+      private
+       ContactCount  : Natural := 0;
+       Is_Ready : Boolean := True;
+   end ContactCountObj;
    
    procedure Add_Contact;
    --procedure Delete_Contact;
