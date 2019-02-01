@@ -21,11 +21,12 @@ package Contact_Mgr is
        ContactCount  : Natural := 0;
        Is_Ready : Boolean := True;
    end ContactCountObj;
+      
    
    procedure Add_Contact;
-   --procedure Delete_Contact;
+   procedure Delete_Contact;
    --procedure Search_Contact;
-   --procedure Sort_PhoneBook;
+   procedure Get_Time_Stats;
    --procedure Display_PhoneBook;
 
 end Contact_Mgr;
