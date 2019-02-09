@@ -1,21 +1,29 @@
-with Ada.Text_IO;         use Ada.Text_IO;
-with Contact_Mgr;
-
 package body search
 with SPARK_Mode => On
 is
 
+   procedure Load_LocalBook (local_Book_func : out Contact_Mgr.PhoneBook)
+   with SPARK_Mode => On
+   is
+   begin
+      Book_global := Contact_Mgr.Book1;
+      local_Book_func := Book_global;
+   end Load_LocalBook;
+
+
    function Get_Index (option : in String; value : in String;
-                       searchlen : in Natural; Count : in Natural)
+                       searchlen : in Natural; Count : in Natural;
+                       Searchcopy : Contact_Mgr.PhoneBook)
                        return Integer
    with SPARK_Mode => On
    is
       Indx :  Integer := -1;
       Finished : Boolean := False;
       --  Get a local copy of Phonebook
-      local_Book : constant Contact_Mgr.PhoneBook := Contact_Mgr.Book1;
+      local_Book :  constant Contact_Mgr.PhoneBook := Searchcopy;
 
    begin
+      --  Load_LocalBook (local_Book);
       if (option = "Firstname") then
          for I in  1 .. Count loop
             pragma Assume (local_Book (I).LenFirstName < 16);
@@ -27,7 +35,7 @@ is
                Finished := True;
             end if;
             exit when Finished;
-            -- If the control reaches here, 'Finished' has to be false.
+            --  If the control reaches here, 'Finished' has to be false.
             pragma Assert (Finished = False);
          end loop;
 
@@ -46,11 +54,10 @@ is
          end loop;
 
       else
-            Indx := -1;
-            Put_Line ("Invalid option");
+         Indx := -1;
+         null;
 
       end if;
-      --  pragma Assert (Idx <= Count);
 
       return Indx;
    end Get_Index;
