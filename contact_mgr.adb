@@ -177,6 +177,7 @@ package body Contact_Mgr is
       Idx : Integer := -1;
       StrLen : Natural;
       Count : Natural;
+      Searchcopy : PhoneBook;
    begin
       ContactCountObj.Get (Count);
       if (Count = 0) then
@@ -196,7 +197,9 @@ package body Contact_Mgr is
                StrLen := Entered'Length;
                SearchString (1 .. StrLen) := Entered;
             end;
-            Idx := search.Get_Index ("Firstname", SearchString, StrLen, Count);
+            search.Load_LocalBook (Searchcopy);
+            Idx := search.Get_Index ("Firstname", SearchString, StrLen, Count,
+                                    Searchcopy);
             if (Idx = -1) then
                Put_Line ("Contact not found :(");
             else
@@ -217,7 +220,9 @@ package body Contact_Mgr is
                StrLen := Entered'Length;
                SearchString (1 .. StrLen) := Entered;
             end;
-            Idx := search.Get_Index ("Lastname", SearchString, StrLen, Count);
+            search.Load_LocalBook (Searchcopy);
+            Idx := search.Get_Index ("Lastname", SearchString, StrLen, Count,
+                                    Searchcopy);
             if (Idx = -1) then
                Put_Line ("Contact not found :(");
             else
