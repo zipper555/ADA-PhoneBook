@@ -13,7 +13,9 @@ begin
    Put_Line ("       Welcome          ");
    Put_Line ("-------------------------");
    loop
-      Put_Line ("1. Add 2.Delete 3.Search 4.Time Stats 5.Display");
+      New_Line;
+      Put_Line ("Enter your choice no.");
+      Put_Line ("1. Add  2.Delete  3.Search  4.TimeStats  5.Display  0.Quit");
       Get (UserOption);
       case UserOption is
       when 1 =>
