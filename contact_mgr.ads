@@ -20,8 +20,9 @@ package Contact_Mgr is
       procedure Incr;
       procedure Decr;
       entry Get (V : out Natural);
-      private
-       ContactCount  : Natural := 0;
+   private
+       Count_Ptr : access Natural := new Natural'(0);
+       -- ContactCount  : Natural;
        Is_Ready : Boolean := True;
    end ContactCountObj;
 
