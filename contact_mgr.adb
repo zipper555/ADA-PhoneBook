@@ -16,27 +16,41 @@ package body Contact_Mgr is
       procedure Incr is
       begin
          Is_Ready := False;
-         ContactCount := ContactCount + 1;
+         --  ContactCount := ContactCount + 1;
+         Count_Ptr.all := Count_Ptr.all + 1;
          Is_Ready := True;
       end Incr;
 
-      procedure Decr
-      is
-         --  See that contact count doesn't go below 1
+      procedure Decr is
       begin
          Is_Ready := False;
-         ContactCount := ContactCount - 1;
+         --  ContactCount := ContactCount - 1;
+         Count_Ptr.all := Count_Ptr.all - 1;
          Is_Ready := True;
       end Decr;
 
       entry Get (V : out Natural)
         when Is_Ready is
       begin
-         V := ContactCount;
+         --  V := ContactCount;
+         V := Count_Ptr.all;
       end Get;
    end ContactCountObj;
 
+   --  Generics for checking if Phonebook is full.
+   generic
+   function Limit_Check (a, b : in Natural) return Boolean;
 
+   function Limit_Check (a, b : in Natural) return Boolean is
+   begin
+      if ((a = b) or (a > b)) then
+         return True;
+      else
+         return False;
+      end if;
+   end Limit_Check;
+
+   function Contact_Book_Full is new Limit_Check;
 
    --  Procedure to Add contact
    procedure Add_Contact is
@@ -44,15 +58,15 @@ package body Contact_Mgr is
       Index : Natural;
    begin
       ContactCountObj.Get (Count);
-      if (Count = 10) then
-         Put_Line ("Phone book full. Delete some comtacts");
+      if (Contact_Book_Full (Count, MAX_NO_CONTACTS)) then
+         Put_Line ("Phone book full. Delete some contacts");
 
       else
          Put_Line ("Adding New Contact..");
          Index := Count + 1;
 
          --  Read First Name
-         Put_Line ("Enter First Name 15 char max");
+         Put_Line ("Enter First Name (max 15 char)");
          Skip_Line;
          declare
             Entered : constant String := Get_Line;
@@ -63,7 +77,7 @@ package body Contact_Mgr is
          end;
 
          --  Read Last Name
-         Put_Line ("Enter Last Name 15 char max");
+         Put_Line ("Enter Last Name (max 15 char)");
          --  Skip_Line;
          declare
             Entered : constant String := Get_Line;
@@ -74,7 +88,7 @@ package body Contact_Mgr is
          end;
 
          --  Read Phone Number
-         Put_Line ("Enter Phone Number 15 char max");
+         Put_Line ("Enter Phone Number (max 15 char)");
          --  Skip_Line;
          declare
             Entered : constant String := Get_Line;
@@ -84,7 +98,6 @@ package body Contact_Mgr is
             Book1 (Index).LenPhoneNo := StrLen;
          end;
 
-         --  Fix me: Update Global Contact count
          Put_Line ("Contact Added at entry " & Natural'Image (Index));
          Put_Line (Book1 (Index).FirstName (1 .. Book1 (Index).LenFirstName)
                    & " "
@@ -106,11 +119,11 @@ package body Contact_Mgr is
       Count : Natural;
       Index : Natural;
    begin
-      Put_Line ("Displaying the Contact list");
+      New_Line;
+      Put_Line ("Displaying the Contact list...");
+      Display_PhoneBook;
 
-      --  Fix me: Hook the display function here
-
-      Put_Line ("Enter the Contact no. to delete");
+      Put_Line ("Enter the Contact Entry to delete");
       --  Contact no. is the index of the contact in the array of contacts
       Get (Entered);
       ContactCountObj.Get (Count);
@@ -128,6 +141,7 @@ package body Contact_Mgr is
          Update_Modified_Time.Go;
          --  Decrementing Contact count
          ContactCountObj.Decr;
+         Put_Line ("Entry Deleted: " & Natural'Image (Entered));
 
       end if;
 
@@ -156,17 +170,17 @@ package body Contact_Mgr is
       Count : Natural;
    begin
       Put_Line ("Displaying Phonebook...");
-      Put_Line ("--------------------------------------------- ");
-      Put_Line ("Firstname   |   Lastname  |   Phone No.");
-      Put_Line ("--------------------------------------------- ");
+      Put_Line ("------------------------------------------------- ");
+      Put_Line ("Entry |  Firstname   |   Lastname  |   Phone No.");
+      Put_Line ("-------------------------------------------------  ");
 
       ContactCountObj.Get (Count);
       for I in 1 .. Count loop
-         Put_Line (Book1 (I).FirstName (1 .. Book1 (I).LenFirstName) & "  |  "
+         Put_Line (" " & Integer'Image (I) & "  |  "
+                  & Book1 (I).FirstName (1 .. Book1 (I).LenFirstName) & "  |  "
                   & Book1 (I).LastName (1 .. Book1 (I).LenLastName) & "  |  "
                   & Book1 (I).PhoneNo (1 .. Book1 (I).LenPhoneNo));
       end loop;
-      --  Put_Line(Count'Img);
    end Display_PhoneBook;
 
 
