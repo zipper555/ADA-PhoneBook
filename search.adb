@@ -23,7 +23,6 @@ is
       local_Book :  constant Contact_Mgr.PhoneBook := Searchcopy;
 
    begin
-      --  Load_LocalBook (local_Book);
       if (option = "Firstname") then
          for I in  1 .. Count loop
             pragma Assume (local_Book (I).LenFirstName < 16);
