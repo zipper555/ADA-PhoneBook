@@ -52,6 +52,7 @@ package body Contact_Mgr is
 
    function Contact_Book_Full is new Limit_Check;
 
+
    --  Procedure to Add contact
    procedure Add_Contact is
       Count : Natural;
@@ -113,12 +114,18 @@ package body Contact_Mgr is
 
    end Add_Contact;
 
+
    --  Procedure to delete contact
    procedure Delete_Contact is
       Entered : Natural;
       Count : Natural;
       Index : Natural;
    begin
+      ContactCountObj.Get (Count);
+      if (Count = 0) then
+         Put_Line ("Phone book empty!");
+         return;
+      end if;
       New_Line;
       Put_Line ("Displaying the Contact list...");
       Display_PhoneBook;
@@ -126,7 +133,6 @@ package body Contact_Mgr is
       Put_Line ("Enter the Contact Entry to delete");
       --  Contact no. is the index of the contact in the array of contacts
       Get (Entered);
-      ContactCountObj.Get (Count);
       if (Entered > Count or Entered = 0) then
          Put_Line ("Enter a valid no. ");
       else
@@ -148,6 +154,7 @@ package body Contact_Mgr is
    end Delete_Contact;
 
 
+
    --  Procedure to get Time statistics
    procedure Get_Time_Stats is
       Now_Time : constant Time := Clock;
@@ -164,6 +171,8 @@ package body Contact_Mgr is
                 & " seconds");
       Put_Line ("----------------------------------------------------");
    end Get_Time_Stats;
+
+
 
    --  Procedure to Display PhoneBook
    procedure Display_PhoneBook is
@@ -182,6 +191,7 @@ package body Contact_Mgr is
                   & Book1 (I).PhoneNo (1 .. Book1 (I).LenPhoneNo));
       end loop;
    end Display_PhoneBook;
+
 
 
    --  Procedure to search a contact in the Phonbook
@@ -203,7 +213,7 @@ package body Contact_Mgr is
       Get (SearchOption);
       case SearchOption is
          when 1 =>
-            Put_Line ("Enter Firstname");
+            Put_Line ("Enter Firstname to search (max 15 char)");
             Skip_Line;
             declare
                Entered : constant String := Get_Line;
@@ -217,6 +227,7 @@ package body Contact_Mgr is
             if (Idx = -1) then
                Put_Line ("Contact not found :(");
             else
+               New_Line;
                Put_Line ("Found at " & Integer'Image (Idx) & "!");
                Put_Line (Book1 (Idx).FirstName (1 .. Book1 (Idx).LenFirstName)
                          & "  |  "
@@ -226,7 +237,7 @@ package body Contact_Mgr is
             end if;
 
          when 2 =>
-            Put_Line ("Enter Lastname");
+            Put_Line ("Enter Lastname to search (max 15 char)");
             Skip_Line;
             declare
                Entered : constant String := Get_Line;
@@ -240,7 +251,8 @@ package body Contact_Mgr is
             if (Idx = -1) then
                Put_Line ("Contact not found :(");
             else
-               Put_Line ("Found at " & Integer'Image (Idx) & "!");
+               New_Line;
+               Put_Line ("Found at Entry no. " & Integer'Image (Idx) & "!");
                Put_Line (Book1 (Idx).FirstName (1 .. Book1 (Idx).LenFirstName)
                          & "  |  "
                          & Book1 (Idx).LastName (1 .. Book1 (Idx).LenLastName)
