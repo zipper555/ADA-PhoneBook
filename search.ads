@@ -8,9 +8,10 @@ is
    function Get_Index (option : in String; value : in String;
                        searchlen : in Natural; Count : in Natural;
                        Searchcopy : Contact_Mgr.PhoneBook)
-                        return Integer                      
+                        return Integer
      with
-     Depends => (Get_Index'Result => (option, value, searchlen, Count, Searchcopy)),
+     Depends => (Get_Index'Result => (option, value, searchlen, Count,
+                                        Searchcopy)),
      Pre => Count < 11 and Count > 0 and
      value'First = 1 and value'Last >= searchlen
      and searchlen > 0 and searchlen < 16,
