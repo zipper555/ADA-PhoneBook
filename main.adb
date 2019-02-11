@@ -5,9 +5,9 @@ with Contact_Mgr; use Contact_Mgr;
 
 procedure Main is
    --  Main task for Phone Book App
-   
+
    UserOption : Integer;
-   
+
 begin
    Put_Line ("------------------------");
    Put_Line ("       Welcome          ");
@@ -36,11 +36,11 @@ begin
       when 0 =>
          --  Quitting
          Put_Line ("Bye!");
-         exit;            
+         exit;
       when others =>
          Put_Line ("Invalid choice. Try Again");
       end case;
-      
+
    end loop;
-   
+
 end Main;
