@@ -1,10 +1,8 @@
-with Ada.Text_IO;         use Ada.Text_IO;
-
 package body time_mgr is
 
    --  Time statistics
    StartTime : constant Time := Clock;
-   LastModified : Time;
+   LastModified : Time := Clock;
 
    --  Task to update time stats
    --  Task is chosen for this purpose so that time updation is accurate
@@ -15,7 +13,7 @@ package body time_mgr is
          select
             accept Go do
                LastModified := Clock;
-               Put_Line ("Last Modified updated");
+               --  Put_Line ("Last Modified updated");
             end Go;
          or
             terminate;
