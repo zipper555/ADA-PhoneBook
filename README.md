@@ -1,5 +1,5 @@
 # ADA-PhoneBook
-A simple phone book implementation in ada.
+A simple phone book implementation in Ada.
 
 Application:
 
